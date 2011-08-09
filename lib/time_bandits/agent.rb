@@ -56,7 +56,7 @@ module TimeBandits
       end
     end
 
-    def wrap_logger(logger)
+    def extend_logger(logger)
       agent = self
       logger.instance_eval do
         @agent = agent

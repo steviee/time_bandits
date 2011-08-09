@@ -56,7 +56,7 @@ module TimeBandits
       @agent = TimeBandits::Agent.new
       @agent.logger = ::Logger.new('/dev/null')
       @logger = ::Logger.new('/dev/null')
-      @proxy = @agent.wrap_logger(@logger)
+      @proxy = @agent.extend_logger(@logger)
     end
 
     test "should return a logger proxy that quaks like a regular logger" do
@@ -104,7 +104,7 @@ module TimeBandits
 
     test "should allow to register multiple loggers with different types" do
       other_logger = ::Logger.new('/dev/null')
-      @agent.wrap_logger(other_logger)
+      @agent.extend_logger(other_logger)
       @logger.info("foobar")
       other_logger.info("some fancy stuff here")
       assert_equal 2, @agent[:loglines].size
