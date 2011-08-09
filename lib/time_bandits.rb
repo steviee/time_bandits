@@ -1,6 +1,8 @@
+require 'active_support'
 require 'active_support/core_ext'
 
 module TimeBandits
+  autoload :Agent,             'time_bandits/agent'
 
   module TimeConsumers
     if defined?(Rails) && Rails::VERSION::STRING < "3.0"
