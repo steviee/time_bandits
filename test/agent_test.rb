@@ -4,7 +4,7 @@ require 'socket'
 module TimeBandits
   class AgentTest < Test::Unit::TestCase
     def setup
-      @agent = TimeBandits::Agent.new
+      @agent = Agent.new
       @out = StringIO.new
       @agent.logger = ::Logger.new(@out)
     end
@@ -53,7 +53,7 @@ module TimeBandits
 
   class LoggingProxyTest < Test::Unit::TestCase
     def setup
-      @agent = TimeBandits::Agent.new
+      @agent = Agent.new
       @agent.logger = ::Logger.new('/dev/null')
       @logger = ::Logger.new('/dev/null')
       @proxy = @agent.extend_logger(@logger)
