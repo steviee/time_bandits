@@ -30,7 +30,7 @@ module TimeBandits
     end
 
     def flush
-      logger.info(@fields.to_json + "\n")
+      logger.info(@fields.to_json)
       reset_fields
     end
 
