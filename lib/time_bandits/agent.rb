@@ -11,7 +11,7 @@ module TimeBandits
       @default_fields = {
         :host => Socket.gethostname.split('.').first,
         :pid => Process.pid,
-        :loglines => [],
+        :lines => [],
         :severity => 0
       }
       @max_lines = DEFAULT_MAX_LINES
@@ -44,13 +44,13 @@ module TimeBandits
     def add_logline(severity, message, progname, logger)
       timestring = iso_time_with_microseconds
       self[:severity] = severity if self[:severity] < severity
-      if @fields[:loglines].size < @max_lines
+      if @fields[:lines].size < @max_lines
         msg = (message || progname).strip
-        @fields[:loglines] << [severity, timestring, msg]
+        @fields[:lines] << [severity, timestring, msg]
         true
       else
         msg = "Loglines truncated to #{@max_lines} lines (MetricsAgent#max_lines)"
-        @fields[:loglines][-1] = [Logger::INFO, timestring, msg]
+        @fields[:lines][-1] = [Logger::INFO, timestring, msg]
         false
       end
     end
@@ -79,7 +79,7 @@ module TimeBandits
     def reset_fields
       @fields = {
       }.merge!(@default_fields)
-      @fields[:loglines] = []
+      @fields[:lines] = []
     end
 
     module MetricsAgentSupport

@@ -71,15 +71,15 @@ module TimeBandits
 
     test "should take the loglevel of the logger into account" do
       @logger.level = ::Logger::INFO
-      no_lines_before_logging = @agent[:loglines].size
+      no_lines_before_logging = @agent[:lines].size
       @logger.debug "something"
-      assert_equal no_lines_before_logging, @agent[:loglines].size
+      assert_equal no_lines_before_logging, @agent[:lines].size
     end
 
-    test "should store the loglines" do
-      assert_equal 0, @agent[:loglines].size
+    test "should store the lines" do
+      assert_equal 0, @agent[:lines].size
       @proxy.debug("foobar")
-      assert_equal 1, @agent[:loglines].size
+      assert_equal 1, @agent[:lines].size
     end
 
     test "should store each logline with severity, a timestamp and the message" do
@@ -87,7 +87,7 @@ module TimeBandits
       @proxy.debug "foo"
       @proxy.warn  "bar"
       @proxy.info  some_logline
-      severity, timestamp, message = @agent[:loglines][2]
+      severity, timestamp, message = @agent[:lines][2]
       assert_equal Logger::INFO, severity
       assert_nothing_raised { Time.parse(timestamp) }
       assert_equal some_logline, message
@@ -107,35 +107,35 @@ module TimeBandits
       @agent.extend_logger(other_logger)
       @logger.info("foobar")
       other_logger.info("some fancy stuff here")
-      assert_equal 2, @agent[:loglines].size
+      assert_equal 2, @agent[:lines].size
     end
 
-    test "should reset the collected loglines when flushed" do
+    test "should reset the collected lines when flushed" do
       @proxy.debug "foo"
       @agent.flush
-      assert_equal [], @agent[:loglines]
+      assert_equal [], @agent[:lines]
     end
 
-    test "should remove leading and trailing newlines from the stored loglines" do
+    test "should remove leading and trailing newlines from the stored lines" do
       @proxy.debug "\n\nfoo\n\n"
-      assert_equal "foo", @agent[:loglines][-1][2]
+      assert_equal "foo", @agent[:lines][-1][2]
     end
 
-    test "should have a limit of loglines per logger after which they will get ignored" do
+    test "should have a limit of lines per logger after which they will get ignored" do
       @agent.max_lines = 2
       @logger.debug "foo"
       @logger.debug "bar"
-      no_lines_before = @agent[:loglines].size
+      no_lines_before = @agent[:lines].size
       @logger.debug "baz"
-      assert_equal no_lines_before, @agent[:loglines].size
+      assert_equal no_lines_before, @agent[:lines].size
     end
 
-    test "should replace the last logged line with a truncation note if the limit of loglines is exceeded" do
+    test "should replace the last logged line with a truncation note if the limit of lines is exceeded" do
       @agent.max_lines = 1
       @logger.debug "foo"
-      assert_equal "foo", @agent[:loglines].last[2]
+      assert_equal "foo", @agent[:lines].last[2]
       @logger.debug "bar"
-      assert_match /truncated/, @agent[:loglines].last[2]
+      assert_match /truncated/, @agent[:lines].last[2]
     end
   end
 end
