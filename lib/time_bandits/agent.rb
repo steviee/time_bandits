@@ -15,7 +15,6 @@ module TimeBandits
         :severity => 0
       }
       @max_lines = DEFAULT_MAX_LINES
-      @logger_types = {}
       reset_fields
     end
 
