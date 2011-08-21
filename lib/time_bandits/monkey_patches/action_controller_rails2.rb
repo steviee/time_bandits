@@ -88,10 +88,7 @@ module ActionController #:nodoc:
 
         logger.info(log_message)
         response.headers["X-Runtime"] = "#{sprintf("%.0f", seconds * 1000)}ms"
-        if logger.respond_to?(:agent)
-          logger.agent[:benchmarks] =
-            TimeBandits.metrics.merge!(:total_time => seconds * 1000, :view_time => (@view_runtime||0) * 1000)
-        end
+        merge_metrics(seconds)
       else
         perform_action_without_time_bandits
       end
@@ -118,16 +115,24 @@ module ActionController #:nodoc:
 
         logger.info(log_message)
         response.headers["X-Runtime"] = "#{sprintf("%.0f", seconds * 1000)}ms"
-        if logger.respond_to?(:agent)
-          logger.agent[:benchmarks] =
-            TimeBandits.metrics.merge!(:total_time => seconds * 1000, :view_time => (@view_runtime||0) * 1000)
-        end
+        merge_metrics(seconds)
       else
         rescue_action_without_time_bandits(exception)
       end
     end
 
     private
+
+    def merge_metrics(total_time_seconds)
+      if logger.respond_to?(:agent)
+        logger.agent.fields.
+          merge!(TimeBandits.metrics).
+          merge!(:total_time => total_time_seconds * 1000,
+                 :view_time => (@view_runtime||0) * 1000,
+                 :response_code => response.status,
+                 :action => "#{self.class.name}\##{action_name}")
+      end
+    end
 
     def view_runtime
       "View: %.3f" % ((@view_runtime||0) * 1000)
