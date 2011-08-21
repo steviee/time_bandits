@@ -57,7 +57,9 @@ module TimeBandits
     consumed # needs to be called for DB time consumer
     rc = e ? "500 Internal Server Error" : "200 OK"
     logger.info "#{title} #{sprintf("%.3f", seconds * 1000)}ms (#{runtime}) | #{rc}"
-    logger.agent[:benchmarks] = metrics.merge!(:response_code => rc) if logger.respond_to?(:agent)
+    if logger.respond_to?(:agent)
+      logger.agent.fields.merge!(metrics).merge!(:response_code => rc)
+    end
     raise e if e
     result
   end
