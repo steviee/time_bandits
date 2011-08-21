@@ -29,7 +29,7 @@ module TimeBandits
     end
 
     def flush
-      logger.info(@fields.to_json)
+      logger << @fields.to_json
       reset_fields
     end
 
@@ -87,11 +87,16 @@ module TimeBandits
         base.class_eval do
           alias :add_without_proxy :add
           alias :add :add_with_proxy
+          alias :log :add
         end
       end
 
       def agent
         @agent
+      end
+
+      def flush
+        @agent.flush
       end
 
       def add_with_proxy(severity, message = nil, progname = nil)
