@@ -111,7 +111,12 @@ module TimeBandits
         _get_heap_slots - @heap_slots
       end
 
-      GCFORMAT = "GC: %.3f(%d) | HP: %d(%d,%d,%d,%d)"
+      # in MB
+      def vm_size
+        TimeBandits.current_vm_size / 1048576
+      end
+
+      GCFORMAT = "GC: %.3f(%d) | HP: %d(%d,%d,%d,%d) | VM: %dMB"
 
       def runtime
         heap_slots = _get_heap_slots
@@ -119,7 +124,7 @@ module TimeBandits
         allocated_objects = self.allocated_objects
         allocated_size = self.allocated_size
         GCHacks.heap_dump if heap_growth > 0 && @@heap_dumps_enabled && defined?(GCHacks)
-        GCFORMAT % [consumed_gc_time, collections, heap_growth, heap_slots, allocated_objects, allocated_size, live_data_set_size]
+        GCFORMAT % [consumed_gc_time, collections, heap_growth, heap_slots, allocated_objects, allocated_size, live_data_set_size, vm_size]
       end
 
       def metrics
@@ -130,7 +135,8 @@ module TimeBandits
           :heap_size => _get_heap_slots,
           :allocated_objects => allocated_objects,
           :allocated_bytes => allocated_size,
-          :live_data_set_size => live_data_set_size
+          :live_data_set_size => live_data_set_size,
+          :vm_size => vm_size
         }
       end
 

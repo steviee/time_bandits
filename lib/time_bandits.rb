@@ -1,5 +1,6 @@
 require 'active_support/core_ext'
 require 'thread_variables'
+require 'time_bandits/time_bandits.so'
 
 module TimeBandits
 

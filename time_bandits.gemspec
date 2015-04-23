@@ -16,11 +16,13 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.extensions    = ["ext/time_bandits/extconf.rb"]
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency("thread_variables")
   s.add_runtime_dependency("activesupport", [">= 2.3.2"])
   s.add_development_dependency("rake")
+  s.add_development_dependency("rake-compiler")
   s.add_development_dependency("mocha")
   s.add_development_dependency("ansi")
   s.add_development_dependency("dalli")

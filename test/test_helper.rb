@@ -17,7 +17,8 @@ end
 
 Minitest::Test.i_suck_and_my_tests_are_order_dependent!
 
-require_relative '../lib/time_bandits'
+$:.unshift File.expand_path('../../lib/', __FILE__)
+require 'time_bandits'
 require "byebug"
 
 ActiveSupport::LogSubscriber.class_eval do

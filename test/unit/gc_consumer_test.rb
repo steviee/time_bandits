@@ -16,7 +16,8 @@ class GCConsumerTest < Test::Unit::TestCase
       :heap_size => 116103,
       :allocated_objects => 8,
       :allocated_bytes => 152,
-      :live_data_set_size => 69437
+      :live_data_set_size => 69437,
+      :vm_size => 123133
     }
     m = TimeBandits.metrics
     assert_equal sample.keys.sort, m.keys.sort
@@ -25,10 +26,10 @@ class GCConsumerTest < Test::Unit::TestCase
   test "formatting" do
     # example runtime:
     # "GC: 0.000(0) | HP: 0(116101,6,0,69442)"
-    gc, heap = TimeBandits.runtime.split(' | ')
+    gc, heap, vm = TimeBandits.runtime.split(' | ')
     assert_equal "GC: 0.000(0)", gc
-    match = /\AHP: \d+\(\d+,\d+,\d+,\d+\)/
-    assert(heap =~ match, "#{heap} does not match #{match}")
+    assert_match(/\AHP: \d+\(\d+,\d+,\d+,\d+\)/, heap)
+    assert_match(/\AVM: \d+MB\z/, vm)
   end
 
   test "collecting GC stats" do
