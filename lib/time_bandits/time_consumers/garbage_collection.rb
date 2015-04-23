@@ -113,7 +113,7 @@ module TimeBandits
 
       # in MB
       def vm_size
-        TimeBandits.current_vm_size / 1048576
+        TimeBandits.current_vm_size
       end
 
       GCFORMAT = "GC: %.3f(%d) | HP: %d(%d,%d,%d,%d) | VM: %dMB"
@@ -124,7 +124,7 @@ module TimeBandits
         allocated_objects = self.allocated_objects
         allocated_size = self.allocated_size
         GCHacks.heap_dump if heap_growth > 0 && @@heap_dumps_enabled && defined?(GCHacks)
-        GCFORMAT % [consumed_gc_time, collections, heap_growth, heap_slots, allocated_objects, allocated_size, live_data_set_size, vm_size]
+        GCFORMAT % [consumed_gc_time, collections, heap_growth, heap_slots, allocated_objects, allocated_size, live_data_set_size, vm_size / 1048576]
       end
 
       def metrics
