@@ -29,7 +29,7 @@ class GCConsumerTest < Test::Unit::TestCase
     gc, heap, vm = TimeBandits.runtime.split(' | ')
     assert_equal "GC: 0.000(0)", gc
     assert_match(/\AHP: \d+\(\d+,\d+,\d+,\d+\)/, heap)
-    assert_match(/\AVM: \d+MB\z/, vm)
+    assert_match(/\ARSS: \d+MB\z/, vm)
   end
 
   test "collecting GC stats" do

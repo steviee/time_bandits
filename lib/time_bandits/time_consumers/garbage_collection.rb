@@ -116,7 +116,7 @@ module TimeBandits
         TimeBandits.current_vm_size
       end
 
-      GCFORMAT = "GC: %.3f(%d) | HP: %d(%d,%d,%d,%d) | VM: %dMB"
+      GCFORMAT = "GC: %.3f(%d) | HP: %d(%d,%d,%d,%d) | RSS: %dMB"
 
       def runtime
         heap_slots = _get_heap_slots
